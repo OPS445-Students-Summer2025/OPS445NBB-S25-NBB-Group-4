@@ -13,12 +13,15 @@ Members: Aung Kaung Satt, Daniel Rhodes, Marian Derlina Fernando, Raffy Limon, Y
 import os
 
 # Raffy-Limon:read /proc/meminfo block
-def name_here():
+def get_overall_mem():
     #Assigned task: Raffy Limon to implement: read from /proc/meminfo
-    pass
-
-
-
+    """Reads total and available memory from /proc/meminfo"""
+    try:
+        f = open('/proc/meminfo', 'r')
+    except:
+        print("Error opening meminfo file.")
+        return (0, 0)
+    
 
 
 
@@ -45,7 +48,7 @@ def name_here():
 # Marian Derlina Fernando: Additional features: 
 # --showGB   show values in GiB instead of MiB
 # --loop N   refresh every N seconds until Ctrl‑C
-def name_here():
+#def name_here():
 #Assigned task: Marian Derlina Fernando to implement: handle command-line arguments
     pass
 
