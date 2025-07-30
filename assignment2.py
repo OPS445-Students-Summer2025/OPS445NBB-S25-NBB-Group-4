@@ -26,10 +26,22 @@ def get_overall_mem():
 
 
 # Daniel Rhodes: gather per‑process memory usage block
-def name_here():
+def get_process_mem():
     #Assigned task: Daniel Rhodes to implement: get process memory usage
-    pass
-
+    '''Initializes the list to store mem information per process'''
+    mem_data = []
+#This creates a list to hold the information on memory needed to be accessed later
+    for pid in os.listdir('/proc'):
+#Iterates throught the list in the process directory and searches for process id's
+        if pid.isdigit():
+#Ensures the information is a PID because it is a digit
+            path = '/proc/' + pid + '/status'
+#Gives the path to the file for the process being looked at
+            try:
+                f = open(path)
+            except:
+                continue
+#Moves to the next process if the one in the loop cannot be done
 
 
 
