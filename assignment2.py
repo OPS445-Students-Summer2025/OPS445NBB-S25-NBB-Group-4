@@ -11,6 +11,7 @@ Members: Aung Kaung Satt, Daniel Rhodes, Marian Derlina Fernando, Raffy Limon, Y
 '''
 
 import os
+import argparse
 
 # Raffy-Limon:read /proc/meminfo block
 def get_overall_mem():
@@ -58,9 +59,13 @@ def name_here():
 
 
 # Marian Derlina Fernando: Additional features: 
-# --showGB   show values in GiB instead of MiB
+# --showGB   show values in GiB instead of KiB which is default from /proc
 # --loop N   refresh every N seconds until Ctrl‑C
-#def name_here():
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--showGB', action='store_true') #helps to show the memory in GiB
+    parser.add_argument('--loop', type=int) #allow the user to loop the report N times
+    return parser.parse_args() #returns user's output
 #Assigned task: Marian Derlina Fernando to implement: handle command-line arguments
     pass
 
