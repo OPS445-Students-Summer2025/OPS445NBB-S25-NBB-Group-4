@@ -35,6 +35,11 @@ def name_here():
 def print_report():
     print("Memory Usage Report")
     print("-------------------")    
+    total_mib, avail_mib = get_overall_mem()
+    used_mib = total_mib - avail_mib
+
+    print("Total Memory:", total_mib, "MiB")
+    print("Used  Memory:", used_mib, "MiB")
     
 
 
