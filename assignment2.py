@@ -32,8 +32,9 @@ def name_here():
 
 
 # Aung Kaung Satt: memory usage display block 
-def name_here():
-    #Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
+def print_report():
+    print("Memory Usage Report")
+    print("-------------------")    
     
 
 
