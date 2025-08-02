@@ -40,6 +40,9 @@ def print_report():
 
     print("Total Memory:", total_mib, "MiB")
     print("Used  Memory:", used_mib, "MiB")
+    print()
+    print("Top Processes by Memory Use:")
+    print("----------------------------")
     
 
 
