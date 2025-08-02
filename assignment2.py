@@ -43,6 +43,10 @@ def print_report():
     print()
     print("Top Processes by Memory Use:")
     print("----------------------------")
+    proc_list = get_process_mem()
+    sorted_list = sort_processes(proc_list)
+    top_list = filter_top(sorted_list, 5)  # show top 5 for now
+    show_top(top_list)
     
 
 
