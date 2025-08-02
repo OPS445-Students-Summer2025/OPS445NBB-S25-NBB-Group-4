@@ -32,21 +32,28 @@ def name_here():
 
 
 # Aung Kaung Satt: memory usage display block 
-def print_report():
+def print_report(total, available, proc_list, show_gb):
     print("Memory Usage Report")
-    print("-------------------")    
+    print("-------------------")  
     total_mib, avail_mib = get_overall_mem()
-    used_mib = total_mib - avail_mib
-
-    print("Total Memory:", total_mib, "MiB")
-    print("Used  Memory:", used_mib, "MiB")
-    print()
-    print("Top Processes by Memory Use:")
-    print("----------------------------")
+    used = total - available
+    unit = 'MiB'
+    divisor = 1.0
+    if show_gb:
+        unit = 'GiB'
+        divisor = 1024.0
     proc_list = get_process_mem()
     sorted_list = sort_processes(proc_list)
     top_list = filter_top(sorted_list, 5)  # show top 5 for now
     show_top(top_list)
+
+    print('Total Memory :', round(total / divisor, 2), unit)
+    print('Used  Memory :', round(used / divisor, 2), unit)
+    print('')
+    print('Top Processes by Memory Use:')
+    print('----------------------------')
+    for item in proc_list:
+        print(item[1].ljust(15), str(round(item[0], 2)) + ' %')
     
 
 
