@@ -57,7 +57,9 @@ def get_process_mem():
 
 
 # Aung Kaung Satt: memory usage display block 
-def name_here():
+def print_report():
+    print("Memory Usage Report")
+    print("-------------------")
     #Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
     
 
