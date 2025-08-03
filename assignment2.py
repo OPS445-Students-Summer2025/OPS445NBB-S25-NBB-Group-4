@@ -52,6 +52,15 @@ def get_process_mem():
             except:
                 continue
 #Moves to the next process if the one in the loop cannot be done
+            name = ''
+            rss_kib = 0
+            for line in f:
+                if line.startswith('Name:'):
+                    name = line.split()[1]
+                elif line.startswith('VmRSS:'):
+                    rss_kib = int(line.split()[1])
+                    break
+                f.close()
 
 
 
