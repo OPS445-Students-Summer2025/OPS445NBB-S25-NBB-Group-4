@@ -17,23 +17,24 @@ import argparse
 def get_overall_mem():
     #Assigned task: Raffy Limon to implement: read from /proc/meminfo
     """Reads total and available memory from /proc/meminfo"""
+    #Add parsing logic to read total and available memory lines from /proc/meminfo.
+    total_kib = 0  #store 0 as initial value
+    avail_kib = 0  #store 0 as initial value
     try:
-        f = open('/proc/meminfo', 'r')
+        f = open('/proc/meminfo', 'r') #reads /proc/meminfo
+        for line in f:         #read the file line by line
+        parts = line.split()   #split each line into words
+        if len(parts) >= 2:    #check if line has at least key and value
+            if parts[0] == 'MemTotal:':
+                total_kib = int(parts[1])        #save total mem to KB
+            elif parts[0] == 'MemAvailable:':
+                avail_kib = int(parts[1])        #save avail mem to KB
+        f.close()     #close after reading
     except:
         print("Error opening meminfo file.")
         return (0, 0)
-   #Add parsing logic to read total and available memory lines from /proc/meminfo.
-    total_kib = 0
-    avail_kib = 0
-    for line in f:
-        parts = line.split()
-        if len(parts) >= 2:
-            if parts[0] == 'MemTotal:':
-                total_kib = int(parts[1])
-            elif parts[0] == 'MemAvailable:':
-                avail_kib = int(parts[1])    
-
-
+   
+      
 
 # Daniel Rhodes: gather per‑process memory usage block
 def get_process_mem():
