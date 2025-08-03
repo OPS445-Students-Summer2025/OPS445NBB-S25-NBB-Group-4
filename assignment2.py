@@ -23,7 +23,7 @@ def get_overall_mem():
     try:
         f = open('/proc/meminfo', 'r') #reads /proc/meminfo
         for line in f:         #read the file line by line
-        parts = line.split()   #split each line into words
+            parts = line.split()   #split each line into words
         if len(parts) >= 2:    #check if line has at least key and value
             if parts[0] == 'MemTotal:':
                 total_kib = int(parts[1])        #save total mem to KB
@@ -53,6 +53,21 @@ def get_process_mem():
             except:
                 continue
 #Moves to the next process if the one in the loop cannot be done
+            name = ''
+            rss_kib = 0
+#Above two lines set up variables for process and memory info
+            for line in f:
+                if line.startswith('Name:'):
+#Checks for the process name
+                    name = line.split()[1]
+#Pulls the name once it establishes it is there
+                elif line.startswith('VmRSS:'):
+#Checks for RSS to know it is using memory
+                    rss_kib = int(line.split()[1])
+#Pulls usage and makes it a usable number
+                    break
+        f.close()
+#Closes file
 
 
 
