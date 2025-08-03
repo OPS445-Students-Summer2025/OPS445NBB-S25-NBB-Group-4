@@ -22,7 +22,16 @@ def get_overall_mem():
     except:
         print("Error opening meminfo file.")
         return (0, 0)
-    
+   #Add parsing logic to read total and available memory lines from /proc/meminfo.
+    total_kib = 0
+    avail_kib = 0
+    for line in f:
+        parts = line.split()
+        if len(parts) >= 2:
+            if parts[0] == 'MemTotal:':
+                total_kib = int(parts[1])
+            elif parts[0] == 'MemAvailable:':
+                avail_kib = int(parts[1])    
 
 
 
