@@ -136,7 +136,7 @@ def show_top(proc_list):
 # Print the name and percentage with a '%'
         print(name.ljust(15), str(pct) + ' %')
 
-#Add simple sorting function without lambda (to keep within scope) and update previous one.
+#Add simple sorting function.
 def sort_processes(proc_list):
     # Sort descending based on percent usage
     proc_list.sort()
