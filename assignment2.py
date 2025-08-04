@@ -30,9 +30,9 @@ def get_overall_mem():
             elif parts[0] == 'MemAvailable:':
                 avail_kib = int(parts[1])        #save avail mem to KB
         f.close()     #close after reading
-    except:
-        print("Error opening meminfo file.")
-        return (0, 0)
+    except OSError:   #handle error if there's a problem reading /proc/meminfo 
+        print ('error: could not read /proc/meminfo')
+        return (total_kib // 1024, avail_kib // 1024)   #convert values from KB to MB
    
       
 
