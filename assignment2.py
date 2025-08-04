@@ -88,8 +88,9 @@ def print_report():
 
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
-
-
+#Yuefan Zhang: sorting and formatting for later
+def sort_processes(proc_list):
+    return sorted(proc_list, reverse=True)
 
 
 # Marian Derlina Fernando: Additional features: 
