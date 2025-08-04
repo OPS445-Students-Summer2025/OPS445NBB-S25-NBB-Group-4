@@ -68,6 +68,17 @@ def get_process_mem():
                     break
         f.close()
 #Closes file
+#Now we Calculate percentages and add the process to the list
+        if rss_kib > 0 and name != '':
+#The above checks that it has something in memory and below it converts it to MiB
+            rss_mib = rss_kib // 1024
+#Sets percentage usage to the MiB divided by the overall memory
+            percent = (rss_mib * 100.0) / get_overall_mem()[0]
+            mem_data.append((percent, name))
+#Appends to mem_data to avoid overwriting previous entries
+    return mem_data
+
+
 
 
 
