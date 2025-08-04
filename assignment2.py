@@ -32,7 +32,7 @@ def get_overall_mem():
         f.close()     #close after reading
     except OSError:   #handle error if there's a problem reading /proc/meminfo 
         print ('error: could not read /proc/meminfo')
-        return (total_kib // 1024, avail_kib // 1024)   #convert values from KB to MB
+    return (total_kib // 1024, avail_kib // 1024)   #convert values from KB to MB
    
       
 
@@ -171,4 +171,6 @@ def main():
 
 
 if __name__ == '__main__':
-    pass
+    total, available = get_overall_mem()
+    print("Total Memory    :", total, "MiB")        #test reading total mem
+    print("Available Memory:", available, "MiB")    #test reading avail mem
