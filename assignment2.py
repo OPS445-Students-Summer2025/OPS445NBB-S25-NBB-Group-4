@@ -136,6 +136,13 @@ def show_top(proc_list):
 # Print the name and percentage with a '%'
         print(name.ljust(15), str(pct) + ' %')
 
+#Add simple sorting function.
+def sort_processes(proc_list):
+    # Sort descending based on percent usage
+    proc_list.sort()
+    proc_list.reverse() # Reverse the list to make it descending
+    return proc_list # Return the sorted list
+
 # Marian Derlina Fernando: Additional features: 
 # --showGB   show values in GiB instead of KiB which is default from /proc
 # --loop N   refresh every N seconds until Ctrl‑C
