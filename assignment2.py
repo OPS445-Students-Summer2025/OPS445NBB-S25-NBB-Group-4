@@ -91,10 +91,18 @@ def print_report():
     # Process list will be printed here later
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
-#Yuefan Zhang: sorting and formatting for later
+# Yuefan Zhang: sorting and formatting for later
 def sort_processes(proc_list):
+# Sort the list in descending order
     return sorted(proc_list, reverse=True)
-
+# Add filter logic for top N processes (value passed later).
+def filter_top(proc_list, top_n):
+# Check if a specific number of top processes is requested
+    if top_n is not None:
+# Return only the top N processes
+        return proc_list[:top_n]
+# If no specific number requested, return the full list
+    return proc_list
 
 # Marian Derlina Fernando: Additional features: 
 # --showGB   show values in GiB instead of KiB which is default from /proc
