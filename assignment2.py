@@ -77,8 +77,14 @@ def get_process_mem():
 def print_report():
     print("Memory Usage Report")
     print("-------------------")
-    
-    
+# Get total and available memory in MiB from the system
+    total_mib, avail_mib = get_overall_mem()
+# Calculate used memory by subtracting available from total
+    used_mib = total_mib - avail_mib
+# Display total memory
+    print("Total Memory:", total_mib, "MiB")
+# Display used memory
+    print("Used  Memory:", used_mib, "MiB")
 
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
