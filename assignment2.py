@@ -89,6 +89,17 @@ def print_report():
     print("Top Processes by Memory Use:")
     print("----------------------------")
     # Process list will be printed here later
+# Retrieve a list of processes with their memory usage
+    proc_list = get_process_mem()
+
+# Sort the process list by memory usage (usually descending)
+    sorted_list = sort_processes(proc_list)
+
+# Filter the top 5 memory-consuming processes
+    top_list = filter_top(sorted_list, 5)  # show top 5 for now
+
+# Display the top memory-consuming processes
+    show_top(top_list)
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
 
