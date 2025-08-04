@@ -85,7 +85,10 @@ def print_report():
     print("Total Memory:", total_mib, "MiB")
 # Display used memory
     print("Used  Memory:", used_mib, "MiB")
-
+    print()
+    print("Top Processes by Memory Use:")
+    print("----------------------------")
+    # Process list will be printed here later
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
 
