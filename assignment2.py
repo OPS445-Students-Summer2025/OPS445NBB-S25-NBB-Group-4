@@ -78,6 +78,9 @@ def get_process_mem():
 #Appends to mem_data to avoid overwriting previous entries
     return mem_data
 
+#Some /proc/[pid]/status files may disappear quickly; just ignore and watch for failures
+#Some skipped processes may be due to missing infor or access issues
+
 
 
 
