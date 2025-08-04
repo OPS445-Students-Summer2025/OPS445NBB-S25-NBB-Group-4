@@ -126,6 +126,16 @@ def filter_top(proc_list, top_n):
 # If no specific number requested, return the full list
     return proc_list
 
+#Add basic output for top processes (to be refined later)
+def show_top(proc_list):
+    for item in proc_list:
+# Round the percentage value to 2 decimal places
+        pct = round(item[0], 2)
+# Extract the process name 
+        name = item[1]
+# Print the name and percentage with a '%'
+        print(name.ljust(15), str(pct) + ' %')
+
 # Marian Derlina Fernando: Additional features: 
 # --showGB   show values in GiB instead of KiB which is default from /proc
 # --loop N   refresh every N seconds until Ctrl‑C
