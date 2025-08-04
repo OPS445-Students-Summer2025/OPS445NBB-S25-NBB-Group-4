@@ -17,23 +17,24 @@ import argparse
 def get_overall_mem():
     #Assigned task: Raffy Limon to implement: read from /proc/meminfo
     """Reads total and available memory from /proc/meminfo"""
+    #Add parsing logic to read total and available memory lines from /proc/meminfo.
+    total_kib = 0  #store 0 as initial value
+    avail_kib = 0  #store 0 as initial value
     try:
-        f = open('/proc/meminfo', 'r')
+        f = open('/proc/meminfo', 'r') #reads /proc/meminfo
+        for line in f:         #read the file line by line
+            parts = line.split()   #split each line into words
+        if len(parts) >= 2:    #check if line has at least key and value
+            if parts[0] == 'MemTotal:':
+                total_kib = int(parts[1])        #save total mem to KB
+            elif parts[0] == 'MemAvailable:':
+                avail_kib = int(parts[1])        #save avail mem to KB
+        f.close()     #close after reading
     except:
         print("Error opening meminfo file.")
         return (0, 0)
-   #Add parsing logic to read total and available memory lines from /proc/meminfo.
-    total_kib = 0
-    avail_kib = 0
-    for line in f:
-        parts = line.split()
-        if len(parts) >= 2:
-            if parts[0] == 'MemTotal:':
-                total_kib = int(parts[1])
-            elif parts[0] == 'MemAvailable:':
-                avail_kib = int(parts[1])    
-
-
+   
+      
 
 # Daniel Rhodes: gather per‑process memory usage block
 def get_process_mem():
@@ -52,66 +53,68 @@ def get_process_mem():
             except:
                 continue
 #Moves to the next process if the one in the loop cannot be done
+            name = ''
+            rss_kib = 0
+#Above two lines set up variables for process and memory info
+            for line in f:
+                if line.startswith('Name:'):
+#Checks for the process name
+                    name = line.split()[1]
+#Pulls the name once it establishes it is there
+                elif line.startswith('VmRSS:'):
+#Checks for RSS to know it is using memory
+                    rss_kib = int(line.split()[1])
+#Pulls usage and makes it a usable number
+                    break
+        f.close()
+#Closes file
 
 
 
 
 # Aung Kaung Satt: memory usage display block 
-def print_report(total, available, proc_list, show_gb):
+# Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
+def print_report():
     print("Memory Usage Report")
     print("-------------------")
-    print("-------------------")
+# Get total and available memory in MiB from the system
     total_mib, avail_mib = get_overall_mem()
+# Calculate used memory by subtracting available from total
     used_mib = total_mib - avail_mib
-
+# Display total memory
     print("Total Memory:", total_mib, "MiB")
+# Display used memory
     print("Used  Memory:", used_mib, "MiB")
-    print()
-    print("Top Processes by Memory Use:")
-    print("----------------------------")
-    used = total - available
-    unit = 'MiB'
-    divisor = 1.0
-    if show_gb:
-        unit = 'GiB'
-        divisor = 1024.0
-    proc_list = get_process_mem()
-    sorted_list = sort_processes(proc_list)
-    top_list = filter_top(sorted_list, 5)  # show top 5 for now
-    show_top(top_list)
 
-    print('Total Memory :', round(total / divisor, 2), unit)
-    print('Used  Memory :', round(used / divisor, 2), unit)
-    print('')
-    print('Top Processes by Memory Use:')
-    print('----------------------------')
-    for item in proc_list:
-        print(item[1].ljust(15), str(round(item[0], 2)) + ' %')
+
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
-
-    # build list of [pct, name, pid], the name trimmed to 15 chars
+    # build list of [pct, name, pid]  (name trimmed to 15 chars)
     tops = []
     for name, pid, rss in proc_list:
-        pct = (rss * 100.0) / used if used else 0.0
+        if used:                         # used is not zero
+            pct = (rss * 100.0) / used
+        else:                            # avoid divide zero
+            pct = 0.0
         tops.append([pct, name[:15], pid])
 
     print("\nTop processes by memory use:")
     print("--------------------------------")
     print("Process            PID     %MEM")
 
-    # select-and-pop the largest five 
+    # select-and-pop the largest five
     for _ in range(5):
         if not tops:            # fewer than 5 processes
             break
         # find index of current max
         idx_max = 0
         for i in range(1, len(tops)):
-            if tops[i][0] > tops[idx_max][0]:
+            if tops[i][0] > tops[idx_max][0]:     # compare pct values
                 idx_max = i
-        pct, p_name, p_pid = tops.pop(idx_max)
+        pct, p_name, p_pid = tops.pop(idx_max)    # remove and retrieve the max entry
 
-        # prints one table row
+        # simple manual spacing
         short_name = p_name
+        # pad so PID and %MEM column lines, show percentage with 2 decimals 
         print(short_name, " "*(17-len(short_name)), pid, " "*(7-len(str(pid))), str(round(pct,2))+' %')
 
 # Marian Derlina Fernando: Additional features: 
