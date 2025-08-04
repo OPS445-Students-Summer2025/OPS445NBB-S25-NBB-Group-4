@@ -88,34 +88,10 @@ def print_report():
 
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
-    # build list of [pct, name, pid]  (name trimmed to 15 chars)
-    tops = []
-    for name, pid, rss in proc_list:
-        if used:                         # used is not zero
-            pct = (rss * 100.0) / used
-        else:                            # avoid divide zero
-            pct = 0.0
-        tops.append([pct, name[:15], pid])
+#Yuefan Zhang: sorting and formatting for later
+def sort_processes(proc_list):
+    return sorted(proc_list, reverse=True)
 
-    print("\nTop processes by memory use:")
-    print("--------------------------------")
-    print("Process            PID     %MEM")
-
-    # select-and-pop the largest five
-    for _ in range(5):
-        if not tops:            # fewer than 5 processes
-            break
-        # find index of current max
-        idx_max = 0
-        for i in range(1, len(tops)):
-            if tops[i][0] > tops[idx_max][0]:     # compare pct values
-                idx_max = i
-        pct, p_name, p_pid = tops.pop(idx_max)    # remove and retrieve the max entry
-
-        # simple manual spacing
-        short_name = p_name
-        # pad so PID and %MEM column lines, show percentage with 2 decimals 
-        print(short_name, " "*(17-len(short_name)), pid, " "*(7-len(str(pid))), str(round(pct,2))+' %')
 
 # Marian Derlina Fernando: Additional features: 
 # --showGB   show values in GiB instead of KiB which is default from /proc
