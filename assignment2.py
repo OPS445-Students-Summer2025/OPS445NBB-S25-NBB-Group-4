@@ -172,5 +172,5 @@ def main():
 
 if __name__ == '__main__':
     total, available = get_overall_mem()
-    print("Total Memory    :", total, "MiB")        #test reading total mem
-    print("Available Memory:", available, "MiB")    #test reading avail mem
+    print("Total Memory    :", total, "MiB")        #this is test only: reading total mem
+    print("Available Memory:", available, "MiB")    #this is test only: reading avail mem
