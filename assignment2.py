@@ -84,33 +84,28 @@ def get_process_mem():
 
 
 # Aung Kaung Satt: memory usage display block 
-# Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
-def print_report():
-    print("Memory Usage Report")
-    print("-------------------")
-# Get total and available memory in MiB from the system
-    total_mib, avail_mib = get_overall_mem()
-# Calculate used memory by subtracting available from total
-    used_mib = total_mib - avail_mib
-# Display total memory
-    print("Total Memory:", total_mib, "MiB")
-# Display used memory
-    print("Used  Memory:", used_mib, "MiB")
-    print()
-    print("Top Processes by Memory Use:")
-    print("----------------------------")
-    # Process list will be printed here later
-# Retrieve a list of processes with their memory usage
-    proc_list = get_process_mem()
+def print_report(total, available, proc_list, show_gb):
+    used = total - available  # Calculate used memory by subtracting available from total
+    unit = 'MiB' # Set default unit to MiB and divisor to 1.0 (no conversion)
+    divisor = 1.0
+    if show_gb:
+        unit = 'GiB'# If show_gb is True, convert values to GiB
+        divisor = 1024.0
 
-# Sort the process list by memory usage (usually descending)
-    sorted_list = sort_processes(proc_list)
+    # Print total and used memory with appropriate unit
+    print('Total Memory :', round(total / divisor, 2), unit)
+    print('Used  Memory :', round(used / divisor, 2), unit)
+    print('')
 
-# Filter the top 5 memory-consuming processes
-    top_list = filter_top(sorted_list, 5)  # show top 5 for now
+    # Print header for top memory-consuming processes
+    print('Top Processes by Memory Use:')
+    print('----------------------------')
 
-# Display the top memory-consuming processes
-    show_top(top_list)
+    # Loop through the list of top processes and print their memory usage
+    for item in proc_list:
+        # item[1] = process name, item[0] = memory usage percentage
+        print(item[1].ljust(15), str(round(item[0], 2)) + ' %')
+
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
 # Refactor sorting and filtering helpers with docstrings.
