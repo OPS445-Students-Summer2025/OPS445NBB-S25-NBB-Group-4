@@ -12,6 +12,7 @@ Members: Aung Kaung Satt, Daniel Rhodes, Marian Derlina Fernando, Raffy Limon, Y
 
 import os
 import argparse
+import time
 
 # Raffy-Limon:read /proc/meminfo block
 def get_overall_mem():
@@ -41,41 +42,38 @@ def get_process_mem():
     #Assigned task: Daniel Rhodes to implement: get process memory usage
     '''Initializes the list to store mem information per process'''
     mem_data = []
+    #This is the lost that will store the information to pull
 #This creates a list to hold the information on memory needed to be accessed later
     for pid in os.listdir('/proc'):
 #Iterates throught the list in the process directory and searches for process id's
         if pid.isdigit():
 #Ensures the information is a PID because it is a digit
-            path = '/proc/' + pid + '/status'
-#Gives the path to the file for the process being looked at
             try:
-                f = open(path)
+#opens the file to run through data retrieving needed memory info
+                f = open('/proc/' + pid + '/status', 'r')
+                name = ''
+                rss_kib = 0
+#Memory in KiB
+                for line in f:
+                    if line.startswith('Name:'):
+#This pulls process name to be scanned for info
+                        name = line.split()[1]
+                    elif line.startswith('VmRSS:'):
+                        rss_kib = int(line.split()[1])
+#Takes memory and stores as an interger
+                        break
+                f.close()
+#Closing the file to conserve memory and cpu usage
+                if rss_kib > 0 and name != '':
+                    rss_mib = rss_kib // 1024
+#Converting grom KiB to MiB to make it more easily read
+                    percent = (rss_mib * 100.0) / get_overall_mem()[0]
+#This is what measures it against the total memory to see more acurate percentage
+                    mem_data.append((percent, name))
+#Takes the result and adds to the list created at the beginning of the function
             except:
-                continue
-#Moves to the next process if the one in the loop cannot be done
-            name = ''
-            rss_kib = 0
-#Above two lines set up variables for process and memory info
-            for line in f:
-                if line.startswith('Name:'):
-#Checks for the process name
-                    name = line.split()[1]
-#Pulls the name once it establishes it is there
-                elif line.startswith('VmRSS:'):
-#Checks for RSS to know it is using memory
-                    rss_kib = int(line.split()[1])
-#Pulls usage and makes it a usable number
-                    break
-        f.close()
-#Closes file
-#Now we Calculate percentages and add the process to the list
-        if rss_kib > 0 and name != '':
-#The above checks that it has something in memory and below it converts it to MiB
-            rss_mib = rss_kib // 1024
-#Sets percentage usage to the MiB divided by the overall memory
-            percent = (rss_mib * 100.0) / get_overall_mem()[0]
-            mem_data.append((percent, name))
-#Appends to mem_data to avoid overwriting previous entries
+                pass
+#Moves past errors with possible permission issues or closed processes
     return mem_data
 
 #Some /proc/[pid]/status files may disappear quickly; just ignore and watch for failures
@@ -88,81 +86,80 @@ def get_process_mem():
 
 # Aung Kaung Satt: memory usage display block 
 # Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
-def print_report():
-    print("Memory Usage Report")
-    print("-------------------")
-# Get total and available memory in MiB from the system
-    total_mib, avail_mib = get_overall_mem()
-# Calculate used memory by subtracting available from total
-    used_mib = total_mib - avail_mib
-# Display total memory
-    print("Total Memory:", total_mib, "MiB")
-# Display used memory
-    print("Used  Memory:", used_mib, "MiB")
-    print()
-    print("Top Processes by Memory Use:")
-    print("----------------------------")
-    # Process list will be printed here later
-# Retrieve a list of processes with their memory usage
-    proc_list = get_process_mem()
+def print_report(total, available, proc_list, show_gb):
+    # Calculate used memory
+    used = total - available
 
-# Sort the process list by memory usage (usually descending)
-    sorted_list = sort_processes(proc_list)
+    # Set default unit to MiB
+    unit = 'MiB'
+    divisor = 1.0
 
-# Filter the top 5 memory-consuming processes
-    top_list = filter_top(sorted_list, 5)  # show top 5 for now
+    # If show_gb is True, convert values to GiB
+    if show_gb:
+        unit = 'GiB'
+        divisor = 1024.0
 
-# Display the top memory-consuming processes
-    show_top(top_list)
+    # Print total and used memory with selected unit
+    print('Total Memory :', round(total / divisor, 2), unit)
+    print('Used  Memory :', round(used / divisor, 2), unit)
+    print('')
+
+    # Print header for top memory-using processes
+    print('Top Processes by Memory Use:')
+    print('----------------------------')
+
+    # Print each process name and its memory usage percentage
+    for item in proc_list:
+        print(item[1].ljust(15), str(round(item[0], 2)) + ' %')
+
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
-# Yuefan Zhang: sorting and formatting for later
+# Refactor sorting and filtering helpers with docstrings.
 def sort_processes(proc_list):
-# Sort the list in descending order
-    return sorted(proc_list, reverse=True)
-# Add filter logic for top N processes (value passed later).
-def filter_top(proc_list, top_n):
-# Check if a specific number of top processes is requested
-    if top_n is not None:
-# Return only the top N processes
-        return proc_list[:top_n]
-# If no specific number requested, return the full list
-    return proc_list
+    """Sorts by percent usage (descending)"""
+    proc_list.sort()  # Sort the list in ascending order by default
+    proc_list.reverse()  # Reverse it to get descending order
+    return proc_list  # Return the sorted list
 
-#Add basic output for top processes (to be refined later)
+def filter_top(proc_list, n):
+    """Returns top N entries or all if N is None"""
+    if n is None:  # If n is None, return the entire list
+        return proc_list
+    return proc_list[:n]  # return only the top n items
+
+#Add simple sorting function
 def show_top(proc_list):
-    for item in proc_list:
-# Round the percentage value to 2 decimal places
+    for item in proc_list:  # Round the percentage value to 2 decimal places
         pct = round(item[0], 2)
-# Extract the process name 
-        name = item[1]
-# Print the name and percentage with a '%'
-        print(name.ljust(15), str(pct) + ' %')
-
-#Add simple sorting function.
-def sort_processes(proc_list):
-    # Sort descending based on percent usage
-    proc_list.sort()
-    proc_list.reverse() # Reverse the list to make it descending
-    return proc_list # Return the sorted list
+        name = item[1]  # Extract the process name
+        print(name.ljust(15), str(pct) + ' %')  # Print the name and percentage with a '%'
 
 # Marian Derlina Fernando: Additional features: 
 # --showGB   show values in GiB instead of KiB which is default from /proc
 # --loop N   refresh every N seconds until Ctrl‑C
 def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--showGB', action='store_true') #helps to show the memory in GiB
-    parser.add_argument('--loop', type=int) #allow the user to loop the report N times
-    return parser.parse_args() #returns user's output
+    p = argparse.ArgumentParser()
+    p.add_argument('--showGB', action='store_true', help='show memory in GiB') #helps to show the memory in GiB
+    p.add_argument('--loop', type=int, help='refresh every N seconds') #allow the user to loop the report N times
+    p.add_argument('--top', type=int, help='show top N process') #filter top N processes
+    return p.parse_args() #returns user's output
 #Assigned task: Marian Derlina Fernando to implement: handle command-line arguments
     pass
 
-
-
-
-
 def main():
     #Assigndd task: Marian Derlina Fernando to implement: main block
+    args = parse_args() #get user input --loop and --showGB
+    while True:
+        total, available = get_overall_mem() #get total and available memory
+        proc_list = get_process_mem() #gets the memory info from all the processes
+        proc_list = sort_processes(proc_list) #sort them my mem
+        proc_list = filter_top(proc_list, args.top) #get the top N processes
+        print_report(total, available, proc_list, args.showGB) #shows the report in GB
+        
+        if args.loop is None: #if no --loop, then stop after one report
+            break
+        time.sleep(args.loop) #wait for N seconds before running again
+        print('\n' + '-' * 30 + '\n') #ouput
     pass
 
 
