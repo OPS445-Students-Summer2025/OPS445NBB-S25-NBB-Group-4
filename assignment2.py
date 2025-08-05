@@ -85,32 +85,32 @@ def get_process_mem():
 
 # Aung Kaung Satt: memory usage display block 
 # Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
-def print_report():
-    print("Memory Usage Report")
-    print("-------------------")
-# Get total and available memory in MiB from the system
-    total_mib, avail_mib = get_overall_mem()
-# Calculate used memory by subtracting available from total
-    used_mib = total_mib - avail_mib
-# Display total memory
-    print("Total Memory:", total_mib, "MiB")
-# Display used memory
-    print("Used  Memory:", used_mib, "MiB")
-    print()
-    print("Top Processes by Memory Use:")
-    print("----------------------------")
-    # Process list will be printed here later
-# Retrieve a list of processes with their memory usage
-    proc_list = get_process_mem()
+def print_report(total, available, proc_list, show_gb):
+    # Calculate used memory
+    used = total - available
 
-# Sort the process list by memory usage (usually descending)
-    sorted_list = sort_processes(proc_list)
+    # Set default unit to MiB
+    unit = 'MiB'
+    divisor = 1.0
 
-# Filter the top 5 memory-consuming processes
-    top_list = filter_top(sorted_list, 5)  # show top 5 for now
+    # If show_gb is True, convert values to GiB
+    if show_gb:
+        unit = 'GiB'
+        divisor = 1024.0
 
-# Display the top memory-consuming processes
-    show_top(top_list)
+    # Print total and used memory with selected unit
+    print('Total Memory :', round(total / divisor, 2), unit)
+    print('Used  Memory :', round(used / divisor, 2), unit)
+    print('')
+
+    # Print header for top memory-using processes
+    print('Top Processes by Memory Use:')
+    print('----------------------------')
+
+    # Print each process name and its memory usage percentage
+    for item in proc_list:
+        print(item[1].ljust(15), str(round(item[0], 2)) + ' %')
+
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
 # Refactor sorting and filtering helpers with docstrings.
