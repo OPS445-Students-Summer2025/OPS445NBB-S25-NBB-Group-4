@@ -145,18 +145,18 @@ def parse_args():
 #Assigned task: Marian Derlina Fernando to implement: handle command-line arguments
     pass
 
-
-
-
-
 def main():
     #Assigndd task: Marian Derlina Fernando to implement: main block
     args = parse_args() #get user input --loop and --showGB
     while True:
-        print_report() #shows the report one time
-        if args.loop is None: #if no --loop, then stop
+        total, available = get_overall_mem() #get total and available memory
+        proc_list = get_process_mem() #gets the memory info from all the processes
+        sorted_list = sort_processes(proc_list) #sort them by their usage
+        top_list = filter_top(sorted_list, 5) #get the top 5 processes
+        print_report(total, available, top_list, args.showGB) #shows the report in GB
+        if args.loop is None: #if no --loop, then stop after one report
             break
-        time.sleep(args.loop) #wait for N second before the next report
+        time.sleep(args.loop) #wait for N seconds before running again
         print('\n' + '-' * 40 + '\n') 
     pass
 
