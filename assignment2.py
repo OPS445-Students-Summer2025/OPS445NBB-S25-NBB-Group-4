@@ -25,11 +25,11 @@ def get_overall_mem():
         f = open('/proc/meminfo', 'r') #reads /proc/meminfo
         for line in f:         #read the file line by line
             parts = line.split()   #split each line into words
-        if len(parts) >= 2:    #check if line has at least key and value
-            if parts[0] == 'MemTotal:':
-                total_kib = int(parts[1])        #save total mem to KB
-            elif parts[0] == 'MemAvailable:':
-                avail_kib = int(parts[1])        #save avail mem to KB
+            if len(parts) >= 2:    #check if line has at least key and value
+                if parts[0] == 'MemTotal:':
+                    total_kib = int(parts[1])        #save total mem to KB
+                elif parts[0] == 'MemAvailable:':
+                    avail_kib = int(parts[1])        #save avail mem to KB
         f.close()     #close after reading
     except OSError:   #handle error if there's a problem reading /proc/meminfo 
         print ('error: could not read /proc/meminfo')
@@ -144,7 +144,7 @@ def parse_args():
     p.add_argument('--top', type=int, help='show top N process') #filter top N processes
     return p.parse_args() #returns user's output
 #Assigned task: Marian Derlina Fernando to implement: handle command-line arguments
-    pass
+    
 
 def main():
     #Assigndd task: Marian Derlina Fernando to implement: main block
@@ -160,7 +160,7 @@ def main():
             break
         time.sleep(args.loop) #wait for N seconds before running again
         print('\n' + '-' * 30 + '\n') #ouput
-    pass
+    
 
 
 
@@ -168,6 +168,4 @@ def main():
 
 
 if __name__ == '__main__':
-    total, available = get_overall_mem()
-    print("Total Memory    :", total, "MiB")        #this is test only: reading total mem
-    print("Available Memory:", available, "MiB")    #this is test only: reading avail mem
+    main()
