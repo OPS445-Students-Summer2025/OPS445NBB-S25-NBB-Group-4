@@ -85,13 +85,10 @@ def get_process_mem():
 
 # Aung Kaung Satt: memory usage display block 
 # Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
-def print_report(show_gb=False):
+def print_report(total, available, proc_list, show_gb):
     # Print report header
     print("Memory Usage Report")
-    print("-------------------")
-
-    # Get total and available memory from the system (in MiB)
-    total, available = get_overall_mem()
+    print("--------------------")
 
     # Calculate used memory
     used = total - available
@@ -100,7 +97,7 @@ def print_report(show_gb=False):
     unit = 'MiB'
     divisor = 1.0
 
-    # If show_gb is True, convert values to GiB
+    # If show_gb is True, convert to GiB
     if show_gb:
         unit = 'GiB'
         divisor = 1024.0
@@ -114,19 +111,9 @@ def print_report(show_gb=False):
     print("Top Processes by Memory Use:")
     print("----------------------------")
 
-    # Retrieve list of processes and their memory usage
-    proc_list = get_process_mem()
-
-    # Sort processes by memory usage (descending order expected)
-    sorted_list = sort_processes(proc_list)
-
-    # Take the top 5 memory-consuming processes
-    top_list = filter_top(sorted_list, 5)
-
     # Print each top process: name and memory usage percentage
-    for item in top_list:
+    for item in proc_list:
         print(item[1].ljust(15), str(round(item[0], 2)) + ' %')
-        
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
 # Refactor sorting and filtering helpers with docstrings.
