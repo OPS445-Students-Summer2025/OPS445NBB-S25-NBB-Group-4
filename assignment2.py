@@ -157,7 +157,7 @@ def main():
         if args.loop is None: #if no --loop, then stop after one report
             break
         time.sleep(args.loop) #wait for N seconds before running again
-        print('\n' + '-' * 40 + '\n') 
+        print('\n' + '-' * 40 + '\n') #ouput
     pass
 
 
