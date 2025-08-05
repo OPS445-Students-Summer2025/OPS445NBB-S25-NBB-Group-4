@@ -113,35 +113,25 @@ def print_report():
     show_top(top_list)
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
-# Yuefan Zhang: sorting and formatting for later
+# Refactor sorting and filtering helpers with docstrings.
 def sort_processes(proc_list):
-# Sort the list in descending order
-    return sorted(proc_list, reverse=True)
-# Add filter logic for top N processes (value passed later).
-def filter_top(proc_list, top_n):
-# Check if a specific number of top processes is requested
-    if top_n is not None:
-# Return only the top N processes
-        return proc_list[:top_n]
-# If no specific number requested, return the full list
-    return proc_list
+    """Sorts by percent usage (descending)"""
+    proc_list.sort()  # Sort the list in ascending order by default
+    proc_list.reverse()  # Reverse it to get descending order
+    return proc_list  # Return the sorted list
 
-#Add basic output for top processes (to be refined later)
+def filter_top(proc_list, n):
+    """Returns top N entries or all if N is None"""
+    if n is None:  # If n is None, return the entire list
+        return proc_list
+    return proc_list[:n]  # return only the top n items
+
+#Add simple sorting function
 def show_top(proc_list):
-    for item in proc_list:
-# Round the percentage value to 2 decimal places
+    for item in proc_list:  # Round the percentage value to 2 decimal places
         pct = round(item[0], 2)
-# Extract the process name 
-        name = item[1]
-# Print the name and percentage with a '%'
-        print(name.ljust(15), str(pct) + ' %')
-
-#Add simple sorting function.
-def sort_processes(proc_list):
-    # Sort descending based on percent usage
-    proc_list.sort()
-    proc_list.reverse() # Reverse the list to make it descending
-    return proc_list # Return the sorted list
+        name = item[1]  # Extract the process name
+        print(name.ljust(15), str(pct) + ' %')  # Print the name and percentage with a '%'
 
 # Marian Derlina Fernando: Additional features: 
 # --showGB   show values in GiB instead of KiB which is default from /proc
