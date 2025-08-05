@@ -12,6 +12,7 @@ Members: Aung Kaung Satt, Daniel Rhodes, Marian Derlina Fernando, Raffy Limon, Y
 
 import os
 import argparse
+import time
 
 # Raffy-Limon:read /proc/meminfo block
 def get_overall_mem():
@@ -150,6 +151,13 @@ def parse_args():
 
 def main():
     #Assigndd task: Marian Derlina Fernando to implement: main block
+    args = parse_args() #get user input --loop and --showGB
+    while True:
+        print_report() #shows the report one time
+        if args.loop is None: #if no --loop, then stop
+            break
+        time.sleep(args.loop) #wait for N second before the next report
+        print('\n' + '-' * 40 + '\n') 
     pass
 
 
