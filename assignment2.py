@@ -84,28 +84,49 @@ def get_process_mem():
 
 
 # Aung Kaung Satt: memory usage display block 
-def print_report(total, available, proc_list, show_gb):
-    used = total - available  # Calculate used memory by subtracting available from total
-    unit = 'MiB' # Set default unit to MiB and divisor to 1.0 (no conversion)
+# Assigned task: Aung Kaung Satt to implement: calculate used memory and print header
+def print_report(show_gb=False):
+    # Print report header
+    print("Memory Usage Report")
+    print("-------------------")
+
+    # Get total and available memory from the system (in MiB)
+    total, available = get_overall_mem()
+
+    # Calculate used memory
+    used = total - available
+
+    # Set default unit and divisor (MiB)
+    unit = 'MiB'
     divisor = 1.0
+
+    # If show_gb is True, convert values to GiB
     if show_gb:
-        unit = 'GiB'# If show_gb is True, convert values to GiB
+        unit = 'GiB'
         divisor = 1024.0
 
-    # Print total and used memory with appropriate unit
+    # Display total and used memory in selected unit
     print('Total Memory :', round(total / divisor, 2), unit)
     print('Used  Memory :', round(used / divisor, 2), unit)
-    print('')
+    print()
 
-    # Print header for top memory-consuming processes
-    print('Top Processes by Memory Use:')
-    print('----------------------------')
+    # Print process memory usage section header
+    print("Top Processes by Memory Use:")
+    print("----------------------------")
 
-    # Loop through the list of top processes and print their memory usage
-    for item in proc_list:
-        # item[1] = process name, item[0] = memory usage percentage
+    # Retrieve list of processes and their memory usage
+    proc_list = get_process_mem()
+
+    # Sort processes by memory usage (descending order expected)
+    sorted_list = sort_processes(proc_list)
+
+    # Take the top 5 memory-consuming processes
+    top_list = filter_top(sorted_list, 5)
+
+    # Print each top process: name and memory usage percentage
+    for item in top_list:
         print(item[1].ljust(15), str(round(item[0], 2)) + ' %')
-
+        
 
 # Yuefan Zhang: sorting and displaying top processes - put inside memory usage display block
 # Refactor sorting and filtering helpers with docstrings.
