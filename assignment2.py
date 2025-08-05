@@ -138,26 +138,28 @@ def show_top(proc_list):
 # --showGB   show values in GiB instead of KiB which is default from /proc
 # --loop N   refresh every N seconds until Ctrl‑C
 def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--showGB', action='store_true') #helps to show the memory in GiB
-    parser.add_argument('--loop', type=int) #allow the user to loop the report N times
-    return parser.parse_args() #returns user's output
+    p = argparse.ArgumentParser()
+    p.add_argument('--showGB', action='store_true', help='show memory in GiB') #helps to show the memory in GiB
+    p.add_argument('--loop', type=int, help='refresh every N seconds') #allow the user to loop the report N times
+    p.add_argument('--top', type=int, help='show top N process') #filter top N processes
+    return p.parse_args() #returns user's output
 #Assigned task: Marian Derlina Fernando to implement: handle command-line arguments
     pass
-
-
-
-
 
 def main():
     #Assigndd task: Marian Derlina Fernando to implement: main block
     args = parse_args() #get user input --loop and --showGB
     while True:
-        print_report() #shows the report one time
-        if args.loop is None: #if no --loop, then stop
+        total, available = get_overall_mem() #get total and available memory
+        proc_list = get_process_mem() #gets the memory info from all the processes
+        proc_list = sort_processes(proc_list) #sort them my mem
+        proc_list = filter_top(proc_list, args.top) #get the top N processes
+        print_report(total, available, proc_list, args.showGB) #shows the report in GB
+        
+        if args.loop is None: #if no --loop, then stop after one report
             break
-        time.sleep(args.loop) #wait for N second before the next report
-        print('\n' + '-' * 40 + '\n') 
+        time.sleep(args.loop) #wait for N seconds before running again
+        print('\n' + '-' * 30 + '\n') #ouput
     pass
 
 
