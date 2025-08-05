@@ -149,11 +149,12 @@ def main():
     #Assigndd task: Marian Derlina Fernando to implement: main block
     args = parse_args() #get user input --loop and --showGB
     while True:
-        total, available = get_overall_mem() #get total and available memory
+        total_mib, available_mib = get_overall_mem() #get total and available memory
         proc_list = get_process_mem() #gets the memory info from all the processes
         sorted_list = sort_processes(proc_list) #sort them by their usage
-        top_list = filter_top(sorted_list, 5) #get the top 5 processes
-        print_report(total, available, top_list, args.showGB) #shows the report in GB
+        top_list = filter_top(sorted_list, args.top) #get the top N processes
+        print_report(total_mib, available_mib, top_list, args.showGB) #shows the report in GB
+        
         if args.loop is None: #if no --loop, then stop after one report
             break
         time.sleep(args.loop) #wait for N seconds before running again
