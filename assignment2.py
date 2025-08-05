@@ -41,41 +41,38 @@ def get_process_mem():
     #Assigned task: Daniel Rhodes to implement: get process memory usage
     '''Initializes the list to store mem information per process'''
     mem_data = []
+    #This is the lost that will store the information to pull
 #This creates a list to hold the information on memory needed to be accessed later
     for pid in os.listdir('/proc'):
 #Iterates throught the list in the process directory and searches for process id's
         if pid.isdigit():
 #Ensures the information is a PID because it is a digit
-            path = '/proc/' + pid + '/status'
-#Gives the path to the file for the process being looked at
             try:
-                f = open(path)
+#opens the file to run through data retrieving needed memory info
+                f = open('/proc/' + pid + '/status', 'r')
+                name = ''
+                rss_kib = 0
+#Memory in KiB
+                for line in f:
+                    if line.startswith('Name:'):
+#This pulls process name to be scanned for info
+                        name = line.split()[1]
+                    elif line.startswith('VmRSS:'):
+                        rss_kib = int(line.split()[1])
+#Takes memory and stores as an interger
+                        break
+                f.close()
+#Closing the file to conserve memory and cpu usage
+                if rss_kib > 0 and name != '':
+                    rss_mib = rss_kib // 1024
+#Converting grom KiB to MiB to make it more easily read
+                    percent = (rss_mib * 100.0) / get_overall_mem()[0]
+#This is what measures it against the total memory to see more acurate percentage
+                    mem_data.append((percent, name))
+#Takes the result and adds to the list created at the beginning of the function
             except:
-                continue
-#Moves to the next process if the one in the loop cannot be done
-            name = ''
-            rss_kib = 0
-#Above two lines set up variables for process and memory info
-            for line in f:
-                if line.startswith('Name:'):
-#Checks for the process name
-                    name = line.split()[1]
-#Pulls the name once it establishes it is there
-                elif line.startswith('VmRSS:'):
-#Checks for RSS to know it is using memory
-                    rss_kib = int(line.split()[1])
-#Pulls usage and makes it a usable number
-                    break
-        f.close()
-#Closes file
-#Now we Calculate percentages and add the process to the list
-        if rss_kib > 0 and name != '':
-#The above checks that it has something in memory and below it converts it to MiB
-            rss_mib = rss_kib // 1024
-#Sets percentage usage to the MiB divided by the overall memory
-            percent = (rss_mib * 100.0) / get_overall_mem()[0]
-            mem_data.append((percent, name))
-#Appends to mem_data to avoid overwriting previous entries
+                pass
+#Moves past errors with possible permission issues or closed processes
     return mem_data
 
 #Some /proc/[pid]/status files may disappear quickly; just ignore and watch for failures
