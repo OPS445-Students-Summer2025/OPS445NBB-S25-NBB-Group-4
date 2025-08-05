@@ -8,7 +8,8 @@ MVP:
 1. Show overall and used memory 
 2. Show memory usage by application name -> process ID
 **Additonal: Show top-memory using  processes sorted by percentage
-Author: Group 4
+
+# Author: Group 4
 Members: Aung Kaung Satt, Daniel Rhodes, Marian Derlina Fernando, Raffy Limon, Yuefan Zhang
 
 # Overview
@@ -46,3 +47,26 @@ We meet weekly via Microsoft Teams on Mondays at 8PM. We stayed via group chat f
 -Each member works on their own branch
 -Opens pull request for review
 -After review, merge into main
+
+# References
+1. GitHub Docs. (n.d.). *Creating and deleting branches within your repository*.  
+   Retrieved July 15 2025, https://docs.github.com/en/repositories/creating-and-managing-repositories
+
+2. Python Software Foundation. (2025). *argparse — Parser for command‑line options, arguments and sub‑commands*.  
+   https://docs.python.org/3/library/argparse.html
+
+3. Kerrisk, M. (2024). *proc(5) — Linux manual page*.  
+   https://man7.org/linux/man-pages/man5/proc.5.html
+
+4. Linux Kernel Documentation. (n.d.). */proc/meminfo* — Memory information file.  
+   https://docs.kernel.org/filesystems/proc.html#meminfo
+
+5. Python Software Foundation. (2025). *Numeric types — int, float.*  
+   https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float 
+
+6. Python Software Foundation.* (2025). *Built‑in types — list.*  
+   https://docs.python.org/3/library/stdtypes.html#list.sort 
+
+7. Python Software Foundation.* (2025). *argparse — Parser for command‑line options.*  
+   https://docs.python.org/3/library/argparse.html 
+>>>>>>> 2cf64009686d02681a91ee2c56c6a993c3be5140
